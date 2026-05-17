@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import { supabase, getProfile } from './lib/supabase.js'
 import Login from './pages/Login.jsx'
 import AtletaDashboard from './pages/AtletaDashboard.jsx'
@@ -47,21 +48,24 @@ export default function App() {
   if (!session) return <Login />
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {profile?.ruolo === 'trainer' ? (
-          <>
-            <Route path="/" element={<TrainerDashboard profile={profile} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
-        ) : (
-          <>
-            <Route path="/" element={<AtletaDashboard profile={profile} />} />
-            <Route path="/workout/:schedaId" element={<WorkoutSession profile={profile} />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
-        )}
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          {profile?.ruolo === 'trainer' ? (
+            <>
+              <Route path="/" element={<TrainerDashboard profile={profile} />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </>
+          ) : (
+            <>
+              <Route path="/" element={<AtletaDashboard profile={profile} />} />
+              <Route path="/workout/:schedaId" element={<WorkoutSession profile={profile} />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </>
+          )}
+        </Routes>
+      </BrowserRouter>
+      <SpeedInsights />
+    </>
   )
 }
